@@ -31,11 +31,11 @@ sed -i s/TOOLCHAIN/`grep -oP 'v4\..*' lean-toolchain`/ docbuild/lakefile.toml
 
 # Initialise `docbuild` as a repository
 cd docbuild
-lake update AddCombi
-lake exe cache get
+~/.elan/bin/lake update AddCombi
+~/.elan/bin/lake exe cache get
 
 # Build the docs
-lake build AddCombi:docs
+~/.elan/bin/lake build AddCombi:docs
 
 cd ../
 
