@@ -10,7 +10,7 @@ version = "0.1.0"
 packagesDir = "../.lake/packages"
 
 [[require]]
-name = "FLT"
+name = "AddCombi"
 path = "../"
 
 [[require]]
