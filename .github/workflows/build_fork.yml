@@ -67,6 +67,10 @@ jobs:
             exit 1
           fi
 
+      - name: Files in AddCombi.Mathlib can't import AddCombi files outside AddCombi.Mathlib
+        run: |
+          ! (find AddCombi/Mathlib -name "*.lean" -type f -print0 | xargs -0 grep -E -n '^import AddCombi.(?!Mathlib)')
+
       - name: Install elan
         run: |
           set -o pipefail
