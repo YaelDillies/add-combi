@@ -1,4 +1,5 @@
 name = "AddCombi"
+keywords = ["math", "additive-combinatorics"]
 defaultTargets = ["AddCombi"]
 
 [leanOptions]
