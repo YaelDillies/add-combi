@@ -148,11 +148,13 @@ jobs:
 
       - if: github.repository MAIN_OR_FORK 'YaelDillies/add-combi'
         name: Cache dependencies docs
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
-          path: docbuild/.lake/build/doc
-          key: MathlibDoc-${{ hashFiles('lake-manifest.json') }}
-          restore-keys: MathlibDoc-
+          path: |
+            docbuild/.lake/build/doc
+            !docbuild/.lake/build/doc/AddCombi
+          key: Doc-${{ hashFiles('lake-manifest.json') }}
+          restore-keys: Doc-
 
       - if: github.repository MAIN_OR_FORK 'YaelDillies/add-combi'
         name: Build documentation
