@@ -160,55 +160,57 @@ jobs:
           linters: gcc
           run: env LEAN_ABORT_ON_PANIC=1 lake exe runLinter AddCombi
 
-      - if: github.repository != 'YaelDillies/add-combi'
-        name: Cache dependencies docs
-        uses: actions/cache@v3
+      - name: Cache dependencies docs
+        if: github.repository != 'YaelDillies/add-combi'
+        uses: actions/cache@v4
         with:
-          path: docbuild/.lake/build/doc
-          key: MathlibDoc-${{ hashFiles('lake-manifest.json') }}
-          restore-keys: MathlibDoc-
+          path: |
+            docbuild/.lake/build/doc
+            !docbuild/.lake/build/doc/AddCombi
+          key: Doc-${{ hashFiles('lake-manifest.json') }}
+          restore-keys: Doc-
 
-      - if: github.repository != 'YaelDillies/add-combi'
-        name: Build documentation
+      - name: Build documentation
+        if: github.repository != 'YaelDillies/add-combi'
         run: scripts/build_docs.sh
 
-      - if: github.repository != 'YaelDillies/add-combi'
-        name: Move documentation to the website
+      - name: Move documentation to the website
+        if: github.repository != 'YaelDillies/add-combi'
         run: |
           mkdir -p website/docs
           mv docs/build website/docs
 
-      - if: github.repository != 'YaelDillies/add-combi'
-        name: Use the README as website index
+      - name: Use the README as website index
+        if: github.repository != 'YaelDillies/add-combi'
         run: cp README.md website/index.md
 
-      - if: github.repository != 'YaelDillies/add-combi'
-        name: Build import graph
+      - name: Build import graph
+        if: github.repository != 'YaelDillies/add-combi'
         run: |
           sudo apt-get update
           sudo apt install graphviz -y
           ~/.elan/bin/lake exe graph website/import_graph.pdf
 
-      - if: github.repository != 'YaelDillies/add-combi'
-        name: Bundle website dependencies
+      - name: Bundle website dependencies
+        if: github.repository != 'YaelDillies/add-combi'
         uses: ruby/setup-ruby@v1
         with:
           working-directory: website
           ruby-version: "3.0" # Not needed with a .ruby-version file
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
-      - if: github.repository != 'YaelDillies/add-combi'
-        name: Bundle website
+      - name: Bundle website
+        if: github.repository != 'YaelDillies/add-combi'
         working-directory: website
         run: JEKYLL_ENV=production bundle exec jekyll build
 
-      - if: github.repository != 'YaelDillies/add-combi'
-        name: Upload docs & blueprint artifact to website
+      - name: Upload docs & blueprint artifact to website
+        if: github.repository != 'YaelDillies/add-combi'
         uses: actions/upload-pages-artifact@v3
         with:
           path: website/_site
 
-      - if: github.repository != 'YaelDillies/add-combi'
-        name: Deploy website to GitHub Pages
+      - name: Deploy website to GitHub Pages
+        if: github.repository != 'YaelDillies/add-combi'
         id: deployment
         uses: actions/deploy-pages@v4
