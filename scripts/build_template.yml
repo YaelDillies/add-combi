@@ -158,7 +158,11 @@ jobs:
 
       - name: Build documentation
         if: github.repository MAIN_OR_FORK 'YaelDillies/add-combi'
-        run: scripts/build_docs.sh
+        id: build-docgen
+        uses: leanprover-community/docgen-action@main
+        with:
+          blueprint: true
+          homepage: "website"
 
       - name: Move documentation to the website
         if: github.repository MAIN_OR_FORK 'YaelDillies/add-combi'
