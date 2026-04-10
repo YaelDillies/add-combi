@@ -1,6 +1,6 @@
 # add-combi
 
-![GitHub CI](https://github.com/YaelDillies/add-combi/workflows/continuous%20integration/badge.svg?branch=master)
+![GitHub CI](https://github.com/YaelDillies/actions/workflows/build.yml/badge.svg?branch=master)
 [![project chat](https://img.shields.io/badge/zulip-join_chat-brightgreen.svg)](https://leanprover.zulipchat.com)
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/YaelDillies/add-combi)
 
@@ -77,11 +77,6 @@ If something goes mysteriously wrong, you can try one of `lake clean` or `rm -rf
 trying `lake exe cache get` again.
 
 Call `lake exe cache` to see its help menu.
-
-### Building HTML documentation
-
-The docs are generated using `scripts/build_docs.sh` (run it from the root directory). It may take a
-while (>20 minutes). The HTML files can then be found in `docs/build`.
 
 ### Dependencies
 
