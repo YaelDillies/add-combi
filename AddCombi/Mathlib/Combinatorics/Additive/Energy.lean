@@ -13,8 +13,9 @@ public import Mathlib.Data.Fintype.Prod
 public import Mathlib.Algebra.Group.Pointwise.Finset.Basic
 public import Mathlib.Data.Rat.Star
 
+import Mathlib.Algebra.Order.Field.Basic -- TODO: This should be imported in `Mathlib.Tactic.Positivity`
+import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Positivity
-import Mathlib
 
 /-!
 # Additive energy
@@ -39,7 +40,7 @@ The following notations are defined in the `Combinatorics.Additive` scope:
 
 It's possibly interesting to have
 `(s ×ˢ s) ×ˢ t ×ˢ t).filter (fun x : (M × M) × M × M ↦ x.1.1 * x.2.1 = x.1.2 * x.2.2)`
-(whose `card` is `mulEnergy' s t`) as a standalone definition.
+(whose density in `G × G × G` is `mulEnergy' s t`) as a standalone definition.
 -/
 
 open scoped BigOperators Pointwise

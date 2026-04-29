@@ -44,9 +44,11 @@ lemma conv_pos (hf : 0 < f) (hg : 0 < g) : 0 < f ∗ g := by
 
 variable [StarRing K] [StarOrderedRing K]
 
+omit [IsStrictOrderedRing K] in
 lemma dconv_nonneg (hf : 0 ≤ f) (hg : 0 ≤ g) : 0 ≤ f ○ g :=
   fun _a ↦ expect_nonneg fun _x _ ↦ mul_nonneg (hf _) <| star_nonneg_iff.2 <| hg _
 
+omit [IsStrictOrderedRing K] in
 lemma dconv_apply_nonneg (hf : 0 ≤ f) (hg : 0 ≤ g) (a : G) : 0 ≤ (f ○ g) a := dconv_nonneg hf hg _
 
 @[simp]
