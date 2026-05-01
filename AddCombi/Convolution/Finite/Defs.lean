@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2023 Yaël Dillies. All rights reserved.
+Released under Apache 2.0 license as described ∈ the file LICENSE.
+Authors: Yaël Dillies
+-/
 module
 
 public import AddCombi.Mathlib.Algebra.Group.Action.Pointwise.Finset
@@ -52,40 +57,7 @@ open scoped BigOperators ComplexConjugate NNReal Pointwise translate Indicator
 
 local notation a " /ℚ " q => (q : ℚ≥0)⁻¹ • a
 
-variable {G H K S : Type*} [Fintype G] [DecidableEq G] [AddCommGroup G]
-
-/-!
-### Convolution of functions
-
-In this section, we define the convolution `f ∗ g` and difference convolution `f ○ g` of functions
-`f g : G → K`, and show how they interact.
--/
-
-/-! ### Trivial character -/
-
-section Semifield
-variable [Semifield K]
-
-/-- The trivial character, i.e. the unit for compact convolution on a finite group.
-
-It takes value the size of the group at zero and `0` elsewhere. -/
-@[expose] def trivChar : G → K := fun a ↦ if a = 0 then card G else 0
-
-@[simp] lemma trivChar_apply (a : G) : (trivChar a : K) = if a = 0 then (card G : K) else 0 := rfl
-
-variable [StarRing K]
-
-@[simp] lemma conj_trivChar : conj (trivChar : G → K) = trivChar := by
-  ext; simp; split_ifs <;> simp
-
-@[simp] lemma conjneg_trivChar : conjneg (trivChar : G → K) = trivChar := by
-  ext; simp; split_ifs <;> simp
-
-@[simp] lemma isSelfAdjoint_trivChar : IsSelfAdjoint (trivChar : G → K) := conj_trivChar
-
-end Semifield
-
-/-! ### Convolution -/
+variable {G H K L : Type*} [Fintype G] [DecidableEq G] [AddCommGroup G]
 
 section Semifield
 variable [Semifield K] [CharZero K] {f g : G → K}
@@ -160,11 +132,11 @@ lemma conv_left_comm (f g h : G → K) : f ∗ (g ∗ h) = g ∗ (f ∗ h) := by
 lemma conv_conv_conv_comm (f g h i : G → K) : f ∗ g ∗ (h ∗ i) = f ∗ h ∗ (g ∗ i) := by
   rw [conv_assoc, conv_assoc, conv_left_comm g]
 
-lemma map_conv [Semifield S] [CharZero S] (m : K →+* S) (f g : G → K) (a : G) : m
+lemma map_conv [Semifield L] [CharZero L] (m : K →+* L) (f g : G → K) (a : G) : m
     ((f ∗ g) a) = (m ∘ f ∗ m ∘ g) a := by
   simp_rw [conv_apply, map_expect, map_mul, Function.comp_apply]
 
-lemma comp_conv [Semifield S] [CharZero S] (m : K →+* S) (f g : G → K) :
+lemma comp_conv [Semifield L] [CharZero L] (m : K →+* L) (f g : G → K) :
     m ∘ (f ∗ g) = m ∘ f ∗ m ∘ g := funext <| map_conv _ _ _
 
 lemma conv_eq_expect_sub (f g : G → K) (a : G) : (f ∗ g) a = 𝔼 t, f (a - t) * g t := by
@@ -202,12 +174,6 @@ lemma expect_conv (f g : G → K) : 𝔼 a, (f ∗ g) a = (𝔼 a, f a) * 𝔼 a
 
 @[simp] lemma const_conv (b : K) (f : G → K) : const _ b ∗ f = const _ (b * 𝔼 x, f x) := by
   ext; simp [conv_eq_expect_sub, mul_expect]
-
-@[simp] lemma conv_trivChar (f : G → K) : f ∗ trivChar = f := by
-  ext a; simp [conv_eq_expect_sub, card_univ, NNRat.smul_def, mul_comm]
-
-@[simp] lemma trivChar_conv (f : G → K) : trivChar ∗ f = f := by
-  rw [conv_comm, conv_trivChar]
 
 lemma support_conv_subset (f g : G → K) : support (f ∗ g) ⊆ support f + support g := by
   rintro a ha
@@ -351,12 +317,6 @@ lemma dconv_const (f : G → K) (b : K) : f ○ const _ b = const _ ((𝔼 x, f 
 lemma const_dconv (b : K) (f : G → K) : const _ b ○ f = const _ (b * 𝔼 x, conj (f x)) := by
   ext; simp [dconv_eq_expect_add, mul_expect]
 
-@[simp] lemma dconv_trivChar (f : G → K) : f ○ trivChar = f := by
-  rw [← conv_conjneg, conjneg_trivChar, conv_trivChar]
-
-@[simp] lemma trivChar_dconv (f : G → K) : trivChar ○ f = conjneg f := by
-  rw [← conv_conjneg, trivChar_conv]
-
 lemma support_dconv_subset (f g : G → K) : support (f ○ g) ⊆ support f - support g := by
   simpa [sub_eq_add_neg] using support_conv_subset f (conjneg g)
 
@@ -475,108 +435,5 @@ lemma coe_comp_conv : ((↑) : _ → ℝ) ∘ (f ∗ g) = (↑) ∘ f ∗ (↑) 
 
 @[simp]
 lemma coe_comp_dconv : ((↑) : _ → ℝ) ∘ (f ○ g) = (↑) ∘ f ○ (↑) ∘ g := funext <| coe_dconv _ _
-
-end NNReal
-
-/-! ### Iterated convolution -/
-
-section Semifield
-variable [Semifield K] [CharZero K] {f g : G → K} {n : ℕ}
-
-/-- Iterated compact convolution.
-
-The value of `f ∗^ n` at `a` is the average of `f x₁ * ... f xₙ` over `x₁ + ... + xₙ = a`. -/
-@[expose]
-def iterConv (f : G → K) : ℕ → G → K
-  | 0 => trivChar
-  | n + 1 => iterConv f n ∗ f
-
-@[inherit_doc] infixl:78 " ∗^ " => iterConv
-
-@[simp] lemma iterConv_zero (f : G → K) : f ∗^ 0 = trivChar := rfl
-@[simp] lemma iterConv_one (f : G → K) : f ∗^ 1 = f := trivChar_conv _
-
-lemma iterConv_succ (f : G → K) (n : ℕ) : f ∗^ (n + 1) = f ∗^ n ∗ f := rfl
-lemma iterConv_succ' (f : G → K) (n : ℕ) : f ∗^ (n + 1) = f ∗ f ∗^ n := conv_comm _ _
-
-lemma iterConv_add (f : G → K) (m : ℕ) : ∀ n, f ∗^ (m + n) = f ∗^ m ∗ f ∗^ n
-  | 0 => by simp
-  | n + 1 => by simp [← add_assoc, iterConv_succ', iterConv_add, conv_left_comm]
-
-lemma iterConv_mul (f : G → K) (m : ℕ) : ∀ n : ℕ, f ∗^ (m * n) = f ∗^ m ∗^ n
-  | 0 => rfl
-  | n + 1 => by simp [mul_add_one, iterConv_succ, iterConv_add, iterConv_mul]
-
-lemma iterConv_mul' (f : G → K) (m n : ℕ) : f ∗^ (m * n) = f ∗^ n ∗^ m := by
-  rw [mul_comm, iterConv_mul]
-
-lemma iterConv_conv_distrib (f g : G → K) : ∀ n, (f ∗ g) ∗^ n = f ∗^ n ∗ g ∗^ n
-  | 0 => (conv_trivChar _).symm
-  | n + 1 => by simp_rw [iterConv_succ, iterConv_conv_distrib, conv_conv_conv_comm]
-
-@[simp] lemma zero_iterConv : ∀ {n}, n ≠ 0 → (0 : G → K) ∗^ n = 0
-  | 0, hn => by cases hn rfl
-  | n + 1, _ => conv_zero _
-
-@[simp] lemma smul_iterConv [Monoid H] [DistribMulAction H K] [IsScalarTower H K K]
-    [SMulCommClass H K K] (c : H) (f : G → K) : ∀ n, (c • f) ∗^ n = c ^ n • f ∗^ n
-  | 0 => by simp
-  | n + 1 => by simp_rw [iterConv_succ, smul_iterConv _ _ n, pow_succ, mul_smul_conv_comm]
-
-lemma comp_iterConv [Semifield S] [CharZero S] (m : K →+* S) (f : G → K) :
-    ∀ n, m ∘ (f ∗^ n) = m ∘ f ∗^ n
-  | 0 => by ext; simp; split_ifs <;> simp
-  | n + 1 => by simp [iterConv_succ, comp_conv, comp_iterConv]
-
-lemma expect_iterConv (f : G → K) : ∀ n, 𝔼 a, (f ∗^ n) a = (𝔼 a, f a) ^ n
-  | 0 => by simp [card_univ, NNRat.smul_def]
-  | n + 1 => by simp only [iterConv_succ, expect_conv, expect_iterConv, pow_succ]
-
-@[simp] lemma iterConv_trivChar : ∀ n, (trivChar : G → K) ∗^ n = trivChar
-  | 0 => rfl
-  | _n + 1 => (conv_trivChar _).trans <| iterConv_trivChar _
-
-lemma support_iterConv_subset (f : G → K) : ∀ n, support (f ∗^ n) ⊆ n • support f
-  | 0 => by
-    simp only [iterConv_zero, zero_smul, support_subset_iff, Ne, ite_eq_right_iff, exists_prop,
-      not_forall, Set.mem_zero, and_imp, forall_eq, imp_true_iff, trivChar_apply]
-  | n + 1 =>
-    (support_conv_subset _ _).trans <| Set.add_subset_add_right <| support_iterConv_subset _ _
-
-lemma map_iterConv [Semifield S] [CharZero S] (m : K →+* S) (f : G → K) (a : G)
-    (n : ℕ) : m ((f ∗^ n) a) = (m ∘ f ∗^ n) a := congr_fun (comp_iterConv m _ _) _
-
-variable [StarRing K]
-
-@[simp] lemma conj_iterConv (f : G → K) : ∀ n, conj (f ∗^ n) = conj f ∗^ n
-  | 0 => by simp
-  | n + 1 => by simp [iterConv_succ, conj_iterConv]
-
-@[simp] lemma conjneg_iterConv (f : G → K) : ∀ n, conjneg (f ∗^ n) = conjneg f ∗^ n
-  | 0 => by simp
-  | n + 1 => by simp [iterConv_succ, conjneg_iterConv]
-
-lemma iterConv_dconv_distrib (f g : G → K) : ∀ n, (f ○ g) ∗^ n = f ∗^ n ○ g ∗^ n
-  | 0 => (dconv_trivChar _).symm
-  | n + 1 => by simp_rw [iterConv_succ, iterConv_dconv_distrib, conv_dconv_conv_comm]
-
-end Semifield
-
-section Field
-variable [Field K] [CharZero K]
-
-@[simp] lemma balance_iterConv (f : G → K) : ∀ {n}, n ≠ 0 → balance (f ∗^ n) = balance f ∗^ n
-  | 0, h => by cases h rfl
-  | 1, _ => by simp
-  | n + 2, _ => by simp [iterConv_succ _ (n + 1), balance_iterConv _ n.succ_ne_zero]
-
-end Field
-
-namespace NNReal
-variable {f : G → ℝ≥0}
-
-@[simp, norm_cast]
-lemma coe_iterConv (f : G → ℝ≥0) (n : ℕ) (a : G) : (↑((f ∗^ n) a) : ℝ) = ((↑) ∘ f ∗^ n) a :=
-  map_iterConv NNReal.toRealHom _ _ _
 
 end NNReal

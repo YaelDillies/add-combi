@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2023 Yaël Dillies. All rights reserved.
+Released under Apache 2.0 license as described ∈ the file LICENSE.
+Authors: Yaël Dillies
+-/
 module
 
 public import AddCombi.Convolution.Finite.Defs
@@ -33,14 +38,6 @@ lemma conv_pos (hf : 0 < f) (hg : 0 < g) : 0 < f ∗ g := by
   refine ⟨conv_nonneg hf hg, a + b, ?_⟩
   rw [conv_apply_add]
   exact expect_pos' (fun c _ ↦ mul_nonneg (hf _) <| hg _) ⟨0, by simpa using mul_pos ha hb⟩
-
-@[simp] lemma iterConv_nonneg (hf : 0 ≤ f) : ∀ {n}, 0 ≤ f ∗^ n
-  | 0 => fun _ ↦ by dsimp; split_ifs <;> norm_num
-  | n + 1 => conv_nonneg (iterConv_nonneg hf) hf
-
-@[simp] lemma iterConv_pos (hf : 0 < f) : ∀ {n}, 0 < f ∗^ n
-  | 0 => Pi.lt_def.2 ⟨iterConv_nonneg hf.le, 0, by simp [Fintype.card_pos]⟩
-  | n + 1 => conv_pos (iterConv_pos hf) hf
 
 variable [StarRing K] [StarOrderedRing K]
 
