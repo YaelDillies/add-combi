@@ -63,7 +63,6 @@ lemma oneOfPair_bound_one :
 
 lemma oneOfPair_bound_two (hH : H ⊆ X ×ˢ X) (Hcard : (7 / 8 : ℝ) * X.dens ^ 2 ≤ H.dens) :
     (1 / 8 : ℝ) * X.dens ^ 2 ≤ X.dens * (oneOfPair H X).dens := calc
-  _ = (7 / 8 : ℝ) * X.dens ^ 2 - 3 / 4 * X.dens ^ 2 := by sorry
   _ ≤ H.dens - (3 / 4 : ℝ) * X.dens ^ 2 := by linarith
   _ ≤ H.dens - (∑ x ∈ X \ oneOfPair H X, {c ∈ X | (x, c) ∈ H}.dens : ℝ) / card α := by
     gcongr; exact oneOfPair_bound_one

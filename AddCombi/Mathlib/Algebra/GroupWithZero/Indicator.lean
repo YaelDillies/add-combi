@@ -8,7 +8,7 @@ public section
 
 open scoped Indicator
 
-variable {α β M₀ N₀ : Type*}
+variable {F α β M₀ N₀ : Type*}
 
 namespace Set
 variable [MonoidWithZero M₀] [MonoidWithZero N₀] {s : Set α}
@@ -19,8 +19,8 @@ lemma indicator_one_inter_apply (s t : Set α) (x : α) : 𝟭_[s ∩ t, M₀] x
 lemma indicator_one_inter (s t : Set α) : 𝟭_[s ∩ t, M₀] = 𝟭_[s] * 𝟭_[t] :=
   funext <| indicator_one_inter_apply _ _
 
-lemma map_indicator_one (f : M₀ →*₀ N₀) (s : Set α) (x : α) : f (𝟭_[s] x) = 𝟭_[s] x := by
-  classical exact MonoidWithZeroHom.map_ite_one_zero ..
+lemma map_indicator_one [FunLike F M₀ N₀] [MonoidWithZeroHomClass F M₀ N₀] (f : F) (s : Set α)
+    (x : α) : f (𝟭_[s] x) = 𝟭_[s] x := by classical exact MonoidWithZeroHom.map_ite_one_zero ..
 
 variable (M₀) in
 @[simp] lemma indicator_one_image (e : α ≃ β) (s : Set α) (b : β) :
