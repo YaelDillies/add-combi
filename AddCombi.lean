@@ -1,9 +1,31 @@
 module
 
+public import AddCombi.AlmostPeriodicity
 public import AddCombi.BSG
 public import AddCombi.Concentration.MarcinkiewiczZygmund
+public import AddCombi.Convolution.Finite.Basic
 public import AddCombi.Convolution.Finite.Defs
+public import AddCombi.Convolution.Finite.Norm
 public import AddCombi.Convolution.Finite.Order
+public import AddCombi.Convolution.Finite.ThreeAP
+public import AddCombi.Fourier.Finite.Bohr.Arc
+public import AddCombi.Fourier.Finite.Bohr.Basic
+public import AddCombi.Fourier.Finite.Bohr.Regular
+public import AddCombi.Fourier.Finite.Chang
+public import AddCombi.Fourier.Finite.LargeSpec
+public import AddCombi.Fourier.Finite.Rudin
+public import AddCombi.FourierTransform.Compact
+public import AddCombi.FourierTransform.Convolution
+public import AddCombi.FourierTransform.Discrete
+public import AddCombi.Function.Indicator.Basic
+public import AddCombi.Function.Indicator.Complex
+public import AddCombi.Inner.Function
+public import AddCombi.Inner.Hoelder.Compact
+public import AddCombi.Inner.Hoelder.Discrete
+public import AddCombi.LpNorm.Compact
+public import AddCombi.LpNorm.Discrete.Basic
+public import AddCombi.LpNorm.Discrete.Defs
+public import AddCombi.LpNorm.Weighted
 public import AddCombi.Mathlib.Algebra.BigOperators.Expect
 public import AddCombi.Mathlib.Algebra.BigOperators.Ring.Finset
 public import AddCombi.Mathlib.Algebra.Group.Action.Pointwise.Finset
@@ -13,6 +35,8 @@ public import AddCombi.Mathlib.Algebra.Notation.Indicator
 public import AddCombi.Mathlib.Algebra.Order.BigOperators.Expect
 public import AddCombi.Mathlib.Algebra.Order.GroupWithZero.Indicator
 public import AddCombi.Mathlib.Algebra.Star.Pi
+public import AddCombi.Mathlib.Analysis.Normed.Ring.Basic
+public import AddCombi.Mathlib.Analysis.RCLike.Basic
 public import AddCombi.Mathlib.Combinatorics.Additive.Energy
 public import AddCombi.Mathlib.Data.Finset.Density
 public import AddCombi.Mathlib.Data.NNRat.Order
