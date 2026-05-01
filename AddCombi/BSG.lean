@@ -390,6 +390,12 @@ lemma BSG_aux {K : ℝ} (hK : 0 < K) (hA : A.Nonempty) (hB : B.Nonempty)
   rw [mul_div_assoc', div_le_iff₀ (by positivity)] at this
   exact this.trans_eq (by ring)
 
+end lemma2
+
+/-- The **Balog-Szemerédi-Gowers theorem** for two sets.
+
+If two sets `A` and `B` have large energy, then there exists a large subset `A'` of `A` of small
+difference. -/
 public theorem BSG {K : ℝ} (hK : 0 ≤ K) (hB : B.Nonempty)
     (hAB : K⁻¹ * (A.dens ^ 2 * B.dens) ≤ E[A, B]) :
     ∃ A' ⊆ A, (2 ^ 4)⁻¹ * K⁻¹ * A.dens ≤ A'.dens ∧
@@ -399,8 +405,15 @@ public theorem BSG {K : ℝ} (hK : 0 ≤ K) (hB : B.Nonempty)
   obtain rfl | hK := eq_or_lt_of_le hK
   · exact ⟨∅, by simp⟩
   · obtain ⟨x, A', hA, h⟩ := BSG_aux hK (by simpa [card_pos]) (by simpa [card_pos]) hAB
-    exact ⟨A', hA.trans (inter_subset_left ..), h⟩
+    exact ⟨A', hA.trans inter_subset_left, h⟩
 
+/-- The **Balog-Szemerédi-Gowers theorem** for two sets.
+
+If two sets `A` and `B` have large energy, then there exist large subsets `A'` of `A` and `B'` of
+`B` of small difference.
+
+Note that the statement is subtly asymmetric in `A` and `B`, because largeness of both `A'` and `B'`
+is measured in terms of `A`. -/
 public theorem BSG₂ {K : ℝ} (hK : 0 ≤ K) (hB : B.Nonempty)
     (hAB : K⁻¹ * (A.dens ^ 2 * B.dens) ≤ E[A, B]) :
     ∃ A' ⊆ A, ∃ B' ⊆ B, (2 ^ 4)⁻¹ * K⁻¹ * A.dens ≤ A'.dens ∧
@@ -410,18 +423,15 @@ public theorem BSG₂ {K : ℝ} (hK : 0 ≤ K) (hB : B.Nonempty)
   · exact ⟨∅, by simp, ∅, by simp⟩
   obtain rfl | hK := eq_or_lt_of_le hK
   · exact ⟨∅, by simp, ∅, by simp⟩
-  · obtain ⟨x, A', hA, h⟩ := BSG_aux hK (by simpa [card_pos]) (by simpa [card_pos]) hAB
-    refine ⟨A', hA.trans (inter_subset_left ..), -x +ᵥ A' ,?_, ?_⟩
-    · calc
-        -x +ᵥ A' ⊆ -x +ᵥ (A ∩ (x +ᵥ B)) := vadd_finset_subset_vadd_finset hA
-        _ ⊆ -x +ᵥ (x +ᵥ B) := vadd_finset_subset_vadd_finset (inter_subset_right ..)
-        _ = B := neg_vadd_vadd ..
-    · refine ⟨h.1, (dens_vadd_finset (-x) A') ▸ h.1, ?_⟩
-      convert h.2 using 2
-      simp only [sub_eq_add_neg, neg_vadd_finset_distrib, neg_neg]
-      rw [add_vadd_comm]
-      apply dens_vadd_finset
+  obtain ⟨x, A', hA, h⟩ := BSG_aux hK (by simpa [card_pos]) (by simpa [card_pos]) hAB
+  refine ⟨A', hA.trans inter_subset_left, -x +ᵥ A', ?_, h.1, ?_, ?_⟩
+  · grw [hA, inter_subset_right, neg_vadd_vadd]
+  · exact dens_vadd_finset (-x) A' ▸ h.1
+  · simpa [sub_eq_add_neg, add_vadd_comm] using h.2
 
+/-- The **Balog-Szemerédi-Gowers theorem** for two sets.
+
+If a set `A` has large energy, then there exists a large subset `A'` of `A` of small difference. -/
 public theorem BSG_self {K : ℝ} (hK : 0 ≤ K) (hA : A.Nonempty) (hAK : K⁻¹ * A.dens ^ 3 ≤ E[A]) :
     ∃ A' ⊆ A, (2 ^ 4)⁻¹ * K⁻¹ * A.dens ≤ A'.dens ∧ (A' - A').dens ≤ 2 ^ 10 * K ^ 5 * A.dens := by
   convert BSG hK hA ?_ using 5
@@ -430,6 +440,9 @@ public theorem BSG_self {K : ℝ} (hK : 0 ≤ K) (hA : A.Nonempty) (hAK : K⁻¹
   · ring_nf
     assumption
 
+/-- The **Balog-Szemerédi-Gowers theorem** for two sets.
+
+If a set `A` has large energy, then there exists a large subset `A'` of `A` of small difference. -/
 public theorem BSG_self' {K : ℝ} (hK : 0 ≤ K) (hA : A.Nonempty) (hAK : K⁻¹ * A.dens ^ 3 ≤ E[A]) :
     ∃ A' ⊆ A, (2 ^ 4)⁻¹ * K⁻¹ * A.dens ≤ A'.dens ∧ (A' - A').dens ≤ 2 ^ 14 * K ^ 6 * A'.dens := by
   obtain ⟨A', hA', hAA', hAK'⟩ := BSG_self hK hA hAK
@@ -440,5 +453,3 @@ public theorem BSG_self' {K : ℝ} (hK : 0 ≤ K) (hA : A.Nonempty) (hAK : K⁻�
   obtain rfl | hK := hK.eq_or_lt
   · simp
   · field_simp
-
-end lemma2
