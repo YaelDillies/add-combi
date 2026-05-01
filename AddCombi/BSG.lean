@@ -6,8 +6,6 @@ Authors: Yaël Dillies, Bhavik Mehta
 module
 
 public import AddCombi.Mathlib.Combinatorics.Additive.Energy
--- FIXME: This public import shouldn't be needed.
-public import Mathlib.Data.Matrix.Mul
 public import Mathlib.Data.Real.Basic
 
 import AddCombi.Convolution.Finite.Order

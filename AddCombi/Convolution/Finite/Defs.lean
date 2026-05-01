@@ -1,8 +1,3 @@
-/-
-Copyright (c) 2023 Yaël Dillies, Bhavik Mehta. All rights reserved.
-Released under Apache 2.0 license as described ∈ the file LICENSE.
-Authors: Yaël Dillies, Bhavik Mehta
--/
 module
 
 public import AddCombi.Mathlib.Algebra.Group.Action.Pointwise.Finset
@@ -13,8 +8,6 @@ public import Mathlib.Algebra.Group.Translate
 public import Mathlib.Algebra.Star.Conjneg
 public import Mathlib.Analysis.RCLike.Basic
 public import Mathlib.Data.Complex.Basic
--- FIXME: This public import shouldn't be needed.
-public import Mathlib.Data.Matrix.Mul
 public import Mathlib.Data.NNReal.Star
 
 import AddCombi.Mathlib.Algebra.BigOperators.Expect
@@ -51,7 +44,7 @@ Similarly we could drop the commutativity assumption on the domain, but this is 
 point in time.
 -/
 
-@[expose] public section
+public section
 
 open Finset Fintype Function
 open scoped BigOperators ComplexConjugate NNReal Pointwise translate Indicator
@@ -74,7 +67,7 @@ section Semifield
 variable [Semifield K]
 
 /-- The trivial character. -/
-def trivChar : G → K := fun a ↦ if a = 0 then card G else 0
+@[expose] def trivChar : G → K := fun a ↦ if a = 0 then card G else 0
 
 @[simp] lemma trivChar_apply (a : G) : (trivChar a : K) = if a = 0 then (card G : K) else 0 := rfl
 
@@ -96,7 +89,7 @@ section Semifield
 variable [Semifield K] [CharZero K] {f g : G → K}
 
 /-- Convolution -/
-def conv (f g : G → K) : G → K := fun a ↦ 𝔼 x : G × G with x.1 + x.2 = a , f x.1 * g x.2
+@[expose] def conv (f g : G → K) : G → K := fun a ↦ 𝔼 x : G × G with x.1 + x.2 = a , f x.1 * g x.2
 
 infixl:71 " ∗ " => conv
 
@@ -235,6 +228,7 @@ lemma indicator_one_conv_indicator_one_eq_dens (s t : Finset G) (a : G) :
 variable [StarRing K]
 
 /-- Difference convolution -/
+@[expose]
 def dconv (f g : G → K) : G → K := fun a ↦ 𝔼 x : G × G with x.1 - x.2 = a, f x.1 * conj g x.2
 
 infixl:71 " ○ " => dconv
@@ -484,6 +478,7 @@ section Semifield
 variable [Semifield K] [CharZero K] {f g : G → K} {n : ℕ}
 
 /-- Iterated convolution. -/
+@[expose]
 def iterConv (f : G → K) : ℕ → G → K
   | 0 => trivChar
   | n + 1 => iterConv f n ∗ f
@@ -500,7 +495,7 @@ lemma iterConv_add (f : G → K) (m : ℕ) : ∀ n, f ∗^ (m + n) = f ∗^ m �
   | 0 => by simp
   | n + 1 => by simp [← add_assoc, iterConv_succ', iterConv_add, conv_left_comm]
 
-lemma iterConv_mul (f : G → K) (m : ℕ) : ∀ n, f ∗^ (m * n) = f ∗^ m ∗^ n
+lemma iterConv_mul (f : G → K) (m : ℕ) : ∀ n : ℕ, f ∗^ (m * n) = f ∗^ m ∗^ n
   | 0 => rfl
   | n + 1 => by simp [mul_add_one, iterConv_succ, iterConv_add, iterConv_mul]
 
