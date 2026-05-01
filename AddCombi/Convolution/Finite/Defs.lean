@@ -66,7 +66,9 @@ In this section, we define the convolution `f ∗ g` and difference convolution 
 section Semifield
 variable [Semifield K]
 
-/-- The trivial character. -/
+/-- The trivial character, i.e. the unit for compact convolution on a finite group.
+
+It takes value the size of the group at zero and `0` elsewhere. -/
 @[expose] def trivChar : G → K := fun a ↦ if a = 0 then card G else 0
 
 @[simp] lemma trivChar_apply (a : G) : (trivChar a : K) = if a = 0 then (card G : K) else 0 := rfl
@@ -88,16 +90,18 @@ end Semifield
 section Semifield
 variable [Semifield K] [CharZero K] {f g : G → K}
 
-/-- Convolution -/
-@[expose] def conv (f g : G → K) : G → K := fun a ↦ 𝔼 x : G × G with x.1 + x.2 = a , f x.1 * g x.2
+/-- Compact convolution on a finite group.
 
-infixl:71 " ∗ " => conv
+The value of `f ∗ g` at `a` is the average of the value of `f b * g c` over `b + c = a`. -/
+@[expose] def conv (f g : G → K) : G → K := fun a ↦ 𝔼 x : G × G with x.1 + x.2 = a, f x.1 * g x.2
+
+@[inherit_doc] infixl:71 " ∗ " => conv
 
 lemma conv_apply (f g : G → K) (a : G) :
     (f ∗ g) a = 𝔼 x : G × G with x.1 + x.2 = a, f x.1 * g x.2 := rfl
 
 lemma conv_eq_smul_sum (f g : G → K) (a : G) :
-    (f ∗ g) a = (∑ x : G × G with x.1 + x.2 = a , f x.1 * g x.2) /ℚ Fintype.card G := by
+    (f ∗ g) a = (∑ x : G × G with x.1 + x.2 = a, f x.1 * g x.2) /ℚ Fintype.card G := by
   simp [conv_apply, expect, ← univ_product_univ, ← card_inter_vadd_neg_eq_card_filter]
 
 @[simp] lemma conv_zero (f : G → K) : f ∗ 0 = 0 := by ext; simp [conv_apply]
@@ -227,17 +231,19 @@ lemma indicator_one_conv_indicator_one_eq_dens (s t : Finset G) (a : G) :
 
 variable [StarRing K]
 
-/-- Difference convolution -/
+/-- Compact difference convolution on a finite group.
+
+The value of `f ∗ g` at `a` is the average of the value of `f b * g c` over `b - c = a`. -/
 @[expose]
 def dconv (f g : G → K) : G → K := fun a ↦ 𝔼 x : G × G with x.1 - x.2 = a, f x.1 * conj g x.2
 
-infixl:71 " ○ " => dconv
+@[inherit_doc] infixl:71 " ○ " => dconv
 
 lemma dconv_apply (f g : G → K) (a : G) :
-    (f ○ g) a = 𝔼 x : G × G with x.1 - x.2 = a , f x.1 * conj g x.2 := rfl
+    (f ○ g) a = 𝔼 x : G × G with x.1 - x.2 = a, f x.1 * conj g x.2 := rfl
 
 lemma dconv_eq_smul_sum (f g : G → K) (a : G) :
-    (f ○ g) a = (∑ x : G × G with x.1 - x.2 = a , f x.1 * conj g x.2) /ℚ Fintype.card G := by
+    (f ○ g) a = (∑ x : G × G with x.1 - x.2 = a, f x.1 * conj g x.2) /ℚ Fintype.card G := by
   simp [dconv_apply, expect, ← univ_product_univ, ← card_inter_vadd_eq_card_filter]
 
 @[simp] lemma conv_conjneg (f g : G → K) : f ∗ conjneg g = f ○ g :=
@@ -477,13 +483,15 @@ end NNReal
 section Semifield
 variable [Semifield K] [CharZero K] {f g : G → K} {n : ℕ}
 
-/-- Iterated convolution. -/
+/-- Iterated compact convolution.
+
+The value of `f ∗^ n` at `a` is the average of `f x₁ * ... f xₙ` over `x₁ + ... + xₙ = a`. -/
 @[expose]
 def iterConv (f : G → K) : ℕ → G → K
   | 0 => trivChar
   | n + 1 => iterConv f n ∗ f
 
-infixl:78 " ∗^ " => iterConv
+@[inherit_doc] infixl:78 " ∗^ " => iterConv
 
 @[simp] lemma iterConv_zero (f : G → K) : f ∗^ 0 = trivChar := rfl
 @[simp] lemma iterConv_one (f : G → K) : f ∗^ 1 = f := trivChar_conv _
