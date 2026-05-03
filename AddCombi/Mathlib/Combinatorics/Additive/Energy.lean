@@ -13,7 +13,6 @@ public import Mathlib.Data.Fintype.Prod
 public import Mathlib.Algebra.Group.Pointwise.Finset.Basic
 public import Mathlib.Data.Rat.Star
 
-import Mathlib.Algebra.Order.Field.Basic -- TODO: This should be imported in `Mathlib.Tactic.Positivity`
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Positivity
 
@@ -123,7 +122,7 @@ lemma mulEnergy'_pos_iff : 0 < Eₘ[s, t] ↔ s.Nonempty ∧ t.Nonempty where
 
 @[to_additive (attr := simp)]
 lemma mulEnergy'_eq_zero_iff : Eₘ[s, t] = 0 ↔ s = ∅ ∨ t = ∅ := by
-  simp [← (zero_le _).not_lt_iff_eq', imp_iff_or_not, or_comm]
+  simp [← zero_le.not_lt_iff_eq', imp_iff_or_not, or_comm]
 
 @[to_additive] lemma mulEnergy'_self_pos_iff : 0 < Eₘ[s] ↔ s.Nonempty := by
   rw [mulEnergy'_pos_iff, and_self_iff]
@@ -210,7 +209,7 @@ variable [CommMonoid M]
 
 @[to_additive] lemma mulEnergy'_comm (s t : Finset M) : Eₘ[s, t] = Eₘ[t, s] := by
   rw [mulEnergy', ← Finset.card_map (Equiv.prodComm _ _).toEmbedding, map_filter]
-  simp [-Finset.card_map, mulEnergy', mul_comm, map_eq_image, Function.comp_def]
+  simp [-Finset.card_map, mulEnergy', mul_comm, map_eq_image]
 
 end CommMonoid
 
