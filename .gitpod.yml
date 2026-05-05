@@ -1,4 +1,4 @@
-# This is run when starting a Gitpod workspace on this repository
+# This is run when starting an Ona workspace on this repository
 
 image: leanprovercommunity/gitpod4
 

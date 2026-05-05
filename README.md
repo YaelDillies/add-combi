@@ -1,10 +1,9 @@
 # add-combi
 
-![GitHub CI](https://github.com/YaelDillies/actions/workflows/build.yml/badge.svg?branch=master)
+![GitHub CI](https://github.com/leanprover-community/add-combi/actions/workflows/build.yml/badge.svg?branch=master)
 [![project chat](https://img.shields.io/badge/zulip-join_chat-brightgreen.svg)](https://leanprover.zulipchat.com)
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/YaelDillies/add-combi)
 
-[add-combi](https://yaeldillies.github.io/add-combi) is a user-maintained library for the [Lean theorem prover](https://leanprover.github.io)
+[add-combi](https://leanprover-community.github.io/add-combi) is a user-maintained library for the [Lean theorem prover](https://leanprover.github.io)
 destined to cover [additive combinatorics](https://en.wikipedia.org/wiki/Additive_combinatorics).
 
 It builds on [mathlib](https://leanprover-community.github.io) and follows its documentation,
@@ -14,11 +13,11 @@ contribution and style guidelines.
 
 You can find detailed instructions to install Lean, mathlib, add-combi, and supporting tools on
 [our website](https://leanprover-community.github.io/get_started.html). Alternatively, click on one
-of the buttons below to open a GitHub Codespace or a Gitpod workspace containing the project.
+of the buttons below to open a GitHub Codespace or an Ona workspace containing the project.
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/YaelDillies/add-combi)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/leanprover-community/add-combi)
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/YaelDillies/add-combi)
+[![Open in Ona](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/leanprover-community/add-combi)
 
 ## Experimenting
 
@@ -31,7 +30,7 @@ For more pointers, see [Learning Lean](https://leanprover-community.github.io/le
 Besides the installation guides above and
 [Lean's general documentation](https://docs.lean-lang.org/lean4/doc/), the documentation of
 add-combi consists of:
-* [The add-combi docs](https://yaeldillies.github.io/add-combi/index.html): documentation
+* [The add-combi docs](https://leanprover-community.github.io/add-combi/index.html): documentation
   [generated automatically](https://github.com/leanprover/doc-gen4) from the source `.lean` files.
 * Some [extra Lean documentation](https://leanprover-community.github.io/learn.html) not specific to
   add-combi (see "Miscellaneous topics").

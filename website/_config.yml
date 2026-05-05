@@ -1,9 +1,9 @@
 title: AddCombi
 description: Additive combinatorics in Lean
 baseurl: ""
-url: "https://yaeldillies.github.io/add-combi/"
-github_username: YaelDillies
-repository: YaelDillies/add-combi
+url: "https://leanprover-community.github.io/add-combi/"
+github_username: leanprover-community
+repository: leanprover-community/add-combi
 
 # Build settings
 remote_theme: pages-themes/cayman@v0.2.0
