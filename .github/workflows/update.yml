@@ -37,3 +37,6 @@ jobs:
 
       - name: Open or update incompatibility issue and PR
         uses: leanprover-community/downstream-reports/.github/actions/track-incompatibility@main
+        with:
+          open-issue: false
+          open-pr: true
